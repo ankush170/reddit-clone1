@@ -2,10 +2,12 @@ import Image from 'next/image'
 import Logo from '../public/logo.png'
 import SignInLogo from '../public/signIn-logo.png'
 import {ChevronDownIcon, HomeIcon, MagnifyingGlassIcon, ArrowLeftOnRectangleIcon} from '@heroicons/react/24/outline'
-import { signIn } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 export default function Header(){
+    const {data:session} = useSession();
     return (
+
         <div className="sticky top-0 z-50 bg-reddit_dark flex px-4 py-2">
                 <div className='relative h-10 w-10 flex-shrink-0 cursor-pointer'>
                     <Image src={Logo} alt={''} />
@@ -23,17 +25,29 @@ export default function Header(){
                     placeholder='Search'/>
                     <button type='submit' hidden/>
                 </form>
-                <div onClick={signIn} className='flex cursor-pointer items-center space-x-1 ml-2'>
+                {session ? (
+                    <div onClick={() => signOut()} className='flex cursor-pointer items-center space-x-1 ml-2'>
+                    <div className='relaive h-10 w-10 flex-shrink-0'>
+                        <Image src={SignInLogo} alt={''}/> 
+                    </div>
+                    <div className='flex-1 text-white text-xs'>
+                        <p className='truncate'>{session?.user?.name}</p>
+                        <p className='hidden text-gray-200 lg:flex'>Log Out</p>
+                    </div>
+                </div>
+                ):(
+                <div onClick={() => signIn()} className='flex cursor-pointer items-center space-x-1 ml-2'>
                     <ArrowLeftOnRectangleIcon className='icon'/>
                     <p className='hidden text-gray-200 lg:flex'>Log In</p>
                 </div>
+                )}               
+        </div>
+    )
+}
 
-                <div className='flex cursor-pointer items-center space-x-1 ml-2'>
+{/* <div className='flex cursor-pointer items-center space-x-1 ml-2'>
                     <div className='relaive h-10 w-10 flex-shrink-0'>
                         <Image src={SignInLogo} alt={''}/> 
                     </div>
                     <p className='hidden text-gray-200 lg:flex'>Sign up</p>
-                </div>
-        </div>
-    )
-}
+                </div> */}
