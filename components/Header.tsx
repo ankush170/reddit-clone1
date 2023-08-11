@@ -12,7 +12,7 @@ export default function Header(){
                 <div className='relative h-10 w-10 flex-shrink-0 cursor-pointer'>
                     <Image src={Logo} alt={''} />
                 </div>
-                <div className='px-2 py-1 flex xl:min-w-[100px]'>
+                <div className='px-2 py-1 flex xl:min-w-[100px] cursor-pointer'>
                     <HomeIcon className='text-white h-6 w-6 m-1 mx-2'/>
                     <p className='text-white hidden mt-1 lg:inline'>Home</p>
                     <ChevronDownIcon className="h-5 w-5 text-white mt-2 ml-2"/>

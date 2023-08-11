@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.1",
+    "@dicebear/collection": "^6.0.4",
+    "@dicebear/core": "^6.0.4",
     "@heroicons/react": "^2.0.18",
     "@radix-ui/react-slot": "^1.0.2",
     "@types/node": "20.4.9",
@@ -27,6 +29,8 @@
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.4",
+    "react-hot-toast": "^2.4.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.6",
