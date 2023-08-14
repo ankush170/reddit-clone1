@@ -14,12 +14,17 @@ type Post {
   created_at: DateTime!
   id: ID!
   image: String
-  subreddit: Subreddit
-    @materializer(query: "subredditUsingPost_subreddit_id_fkey")
+  subreddit: [Subreddit]
+    @materializer(
+      query: "subredditListById"
+      arguments: [{ name: "id", field: "subreddit_id"}]
+    )
   subreddit_id: ID
   title: String
   username: String
-  vote: [Vote] @materializer(query: "voteUsingVote_post_id_fkey")
+  vote: [Vote] @materializer(
+    query: "voteUsingVote_post_id_fkey"
+  )
 }
 
 type Subreddit {
@@ -142,17 +147,24 @@ type Query {
       table: "subreddit"
       configuration: "postgresql_config"
     )
-
+  subredditListById(id: ID!): [Subreddit]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "subreddit" where "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
   subredditListByTopic(topic: String!): [Subreddit]
     @dbquery(
       type: "postgresql"
       schema: "public"
       query: """
-        select * from "subreddit" where "topic" = $1
+      select * from "subreddit" where "topic" = $1
       """
       configuration: "postgresql_config"
     )
-
   subredditPaginatedList(first: Int, after: Int): [Subreddit]
     @dbquery(
       type: "postgresql"
@@ -162,15 +174,15 @@ type Query {
       """
       configuration: "postgresql_config"
     )
-  subredditUsingPost_subreddit_id_fkey(subreddit_id: ID!): Subreddit
-    @dbquery(
-      type: "postgresql"
-      schema: "public"
-      query: """
-      SELECT "created_at", "id", "topic" FROM "subreddit" WHERE "id" = $1
-      """
-      configuration: "postgresql_config"
-    )
+  # subredditUsingPost_subreddit_id_fkey(subreddit_id: ID!): Subreddit
+  #   @dbquery(
+  #     type: "postgresql"
+  #     schema: "public"
+  #     query: """
+  #     SELECT "created_at", "id", "topic" FROM "subreddit" WHERE "id" = $1
+  #     """
+  #     configuration: "postgresql_config"
+  #   )
   " Queries for type 'Vote' "
   vote(id: ID!): Vote
     @dbquery(
@@ -265,11 +277,11 @@ type Mutation {
       configuration: "postgresql_config"
     )
   insertPost(
-    body: String
-    subreddit_id: ID
-    title: String
-    username: String
-    image: String
+    body: String!
+    subreddit_id: ID!
+    title: String!
+    username: String!
+    image: String!
   ): Post
     @dbquery(
       type: "postgresql"
@@ -313,7 +325,7 @@ type Mutation {
       dml: DELETE
       configuration: "postgresql_config"
     )
-  insertSubreddit(topic: String, created_at: DateTime!): Subreddit
+  insertSubreddit(topic: String!): Subreddit
     @dbquery(
       type: "postgresql"
       schema: "public"

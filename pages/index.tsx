@@ -1,3 +1,4 @@
+import Feed from "@/components/Feed";
 import Postbox from "@/components/Postbox";
 import Head from "next/head";
 
@@ -12,7 +13,7 @@ export default function Home() {
       <Postbox/>
 
       <div className="flex">
-        {/* {Feed} */}
+        <Feed />
       </div>
     </div>
   )
