@@ -38,11 +38,11 @@ function Postbox() {
         const notification = toast.loading('Creating New Post...')
 
         try {
-            const {data: {subredditListByTopic}}=await client.query({
+            const {data: {subredditListByTopic},}=await client.query({
                 query: GET_SUBREDDIT_BY_TOPIC,
                 variables: {
-                    topic: formData.subReddit
-                }
+                    topic: formData.subReddit,
+                },
             })
 
             const subredditExists = subredditListByTopic.length > 0;
@@ -95,12 +95,12 @@ function Postbox() {
             setValue('subReddit', '')
 
             toast.success('New Post Created', {
-                id: notification
+                id: notification,
             })
 
         } catch (error) {
             toast.error('Whoops! Something went wrong', {
-                id: notification
+                id: notification,
             })
         }
     })
