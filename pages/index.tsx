@@ -1,9 +1,10 @@
 import Feed from "@/components/Feed";
 import Postbox from "@/components/Postbox";
+import type { NextPage } from "next";
 import Head from "next/head";
 
 
-export default function Home() {
+const Home: NextPage = () => {
   return (
     <div className="max-w-5xl my-6 mx-auto">
       <Head>
@@ -18,3 +19,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home;

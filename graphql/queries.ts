@@ -31,7 +31,7 @@ export const GET_ALL_POSTS = gql`
             }
         }
     }
-`
+`;
 
 export const GET_SUBREDDIT_BY_TOPIC = gql`
     query MyQuery($topic: String!){
