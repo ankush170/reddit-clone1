@@ -10,8 +10,9 @@ type Props = {
 function Avatar({seed, large}: Props) {
     const {data:session} = useSession();
   return (
-    <div className={`relative h-9 w-9 rounded-full border-gray-500 bg-white ml-4 overflow-hidden 
-    ${large && 'h-20 w-20'}`}>
+    <div className={`relative rounded-full border-gray-500 bg-white ml-4 overflow-hidden 
+    ${large? 'h-20 w-20' : 'h-9 w-9'}`
+    }>
         <Image 
             alt=''
             layout='fill'
