@@ -3,16 +3,19 @@ import Logo from '../public/logo.png'
 import SignInLogo from '../public/signIn-logo.png'
 import {ChevronDownIcon, HomeIcon, MagnifyingGlassIcon, ArrowLeftOnRectangleIcon} from '@heroicons/react/24/outline'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 export default function Header(){
     const {data:session} = useSession();
     return (
 
-        <div className="sticky top-0 z-50 bg-reddit_dark flex px-4 py-2">
+        <div className="sticky top-0 z-50 bg-reddit_dark flex px-4 py-2 items-center">
                 <div className='relative h-10 w-10 flex-shrink-0 cursor-pointer'>
-                    <Image src={Logo} alt={''} />
+                    <Link href="/">
+                        <Image src={Logo} alt={''} />
+                    </Link>
                 </div>
-                <div className='px-2 py-1 flex xl:min-w-[100px]'>
+                <div className='px-2 py-1 flex xl:min-w-[100px] cursor-pointer'>
                     <HomeIcon className='text-white h-6 w-6 m-1 mx-2'/>
                     <p className='text-white hidden mt-1 lg:inline'>Home</p>
                     <ChevronDownIcon className="h-5 w-5 text-white mt-2 ml-2"/>

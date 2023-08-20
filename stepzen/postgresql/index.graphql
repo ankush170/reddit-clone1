@@ -14,12 +14,17 @@ type Post {
   created_at: DateTime!
   id: ID!
   image: String
-  subreddit: Subreddit
-    @materializer(query: "subredditUsingPost_subreddit_id_fkey")
+  subreddit: [Subreddit]
+    @materializer(
+      query: "subredditListById",
+      arguments: [{ name: "id", field: "subreddit_id"}]
+    )
   subreddit_id: ID
   title: String
   username: String
-  vote: [Vote] @materializer(query: "voteUsingVote_post_id_fkey")
+  vote: [Vote] @materializer(
+    query: "voteUsingVote_post_id_fkey"
+  )
 }
 
 type Subreddit {
@@ -88,7 +93,10 @@ type Query {
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "post"
+      query: """
+        select * from "post"
+        order by "post"."created_at" desc
+      """
       configuration: "postgresql_config"
     )
   postPaginatedList(first: Int, after: Int): [Post]
@@ -97,6 +105,18 @@ type Query {
       schema: "public"
       query: """
       SELECT "body", "created_at", "id", "image", "subreddit_id", "title", "username" FROM "post" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  postListByTopic(topic: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+        select *, "post".id as id from "post"
+        join "subreddit" on "subreddit"."id" = "post"."subreddit_id"
+        where "subreddit"."topic" = $1
+        order by "post"."created_at" desc
       """
       configuration: "postgresql_config"
     )
@@ -142,6 +162,24 @@ type Query {
       table: "subreddit"
       configuration: "postgresql_config"
     )
+  subredditListById(id: ID!): [Subreddit]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "subreddit" where "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  subredditListByTopic(topic: String!): [Subreddit]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "subreddit" where "topic" = $1
+      """
+      configuration: "postgresql_config"
+    )
   subredditPaginatedList(first: Int, after: Int): [Subreddit]
     @dbquery(
       type: "postgresql"
@@ -151,15 +189,15 @@ type Query {
       """
       configuration: "postgresql_config"
     )
-  subredditUsingPost_subreddit_id_fkey(subreddit_id: ID!): Subreddit
-    @dbquery(
-      type: "postgresql"
-      schema: "public"
-      query: """
-      SELECT "created_at", "id", "topic" FROM "subreddit" WHERE "id" = $1
-      """
-      configuration: "postgresql_config"
-    )
+  # subredditUsingPost_subreddit_id_fkey(subreddit_id: ID!): Subreddit
+  #   @dbquery(
+  #     type: "postgresql"
+  #     schema: "public"
+  #     query: """
+  #     SELECT "created_at", "id", "topic" FROM "subreddit" WHERE "id" = $1
+  #     """
+  #     configuration: "postgresql_config"
+  #   )
   " Queries for type 'Vote' "
   vote(id: ID!): Vote
     @dbquery(
@@ -254,12 +292,11 @@ type Mutation {
       configuration: "postgresql_config"
     )
   insertPost(
-    body: String
-    subreddit_id: ID
-    created_at: DateTime!
-    title: String
-    username: String
-    image: String
+    body: String!
+    subreddit_id: ID!
+    title: String!
+    username: String!
+    image: String!
   ): Post
     @dbquery(
       type: "postgresql"
@@ -303,7 +340,7 @@ type Mutation {
       dml: DELETE
       configuration: "postgresql_config"
     )
-  insertSubreddit(topic: String, created_at: DateTime!): Subreddit
+  insertSubreddit(topic: String!): Subreddit
     @dbquery(
       type: "postgresql"
       schema: "public"

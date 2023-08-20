@@ -26,9 +26,19 @@ module.exports = {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
+        reddit_orange: '#f54404',
+        reddit_red: '#f54404',
         reddit_dark: {
           DEFAULT: '#030303',
-          brighter: '#272728',
+          brighter: '#1a1a1a',
+          brightest: '#272728',
+        },
+        reddit_border: {
+          DEFAULT: '#343536',
+        },
+        reddit_text: {
+          DEFAULT: 'rgb(215, 218, 220)',
+          darker: '#818384',
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
