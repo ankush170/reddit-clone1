@@ -16,15 +16,13 @@ type Post {
   image: String
   subreddit: [Subreddit]
     @materializer(
-      query: "subredditListById",
-      arguments: [{ name: "id", field: "subreddit_id"}]
+      query: "subredditListById"
+      arguments: [{ name: "id", field: "subreddit_id" }]
     )
   subreddit_id: ID
   title: String
   username: String
-  vote: [Vote] @materializer(
-    query: "voteUsingVote_post_id_fkey"
-  )
+  vote: [Vote] @materializer(query: "voteUsingVote_post_id_fkey")
 }
 
 type Subreddit {
@@ -93,10 +91,7 @@ type Query {
     @dbquery(
       type: "postgresql"
       schema: "public"
-      query: """
-        select * from "post"
-        order by "post"."created_at" desc
-      """
+      table: "post"
       configuration: "postgresql_config"
     )
   postPaginatedList(first: Int, after: Int): [Post]
@@ -113,10 +108,10 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-        select *, "post".id as id from "post"
-        join "subreddit" on "subreddit"."id" = "post"."subreddit_id"
-        where "subreddit"."topic" = $1
-        order by "post"."created_at" desc
+      select *, "post".id as id from "post"
+      join "subreddit" on "subreddit"."id" = "post"."subreddit_id"
+      where "subreddit"."topic" = $1
+      order by "post"."created_at" desc
       """
       configuration: "postgresql_config"
     )

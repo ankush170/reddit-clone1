@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer components {
-    .icon {
-        @apply text-white  h-9 w-6 lg:w-9 cursor-pointer rounded-sm lg:p-1
-    }
+  .icon {
+    @apply text-white  h-9 w-6 lg:w-9 cursor-pointer rounded-sm lg:p-1;
+  }
 }
