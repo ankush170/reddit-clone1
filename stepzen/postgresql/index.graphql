@@ -10,7 +10,10 @@ type Comments {
 type Post {
   body: String
   comments: [Comments]
-    @materializer(query: "commentsUsingComments_post_id_fkey")
+    @materializer(
+      query: "commentsUsingComments_post_id_fkey"
+      arguments: [{name: "post_id", field: "id"}]
+    )
   created_at: DateTime!
   id: ID!
   image: String
@@ -22,7 +25,10 @@ type Post {
   subreddit_id: ID
   title: String
   username: String
-  vote: [Vote] @materializer(query: "voteUsingVote_post_id_fkey")
+  vote: [Vote] @materializer(
+    query: "voteUsingVote_post_id_fkey"
+    arguments: [{name: "post_id", field: "id"}]
+    )
 }
 
 type Subreddit {
@@ -70,12 +76,12 @@ type Query {
       """
       configuration: "postgresql_config"
     )
-  commentsUsingComments_post_id_fkey(id: ID!): [Comments]
+  commentsUsingComments_post_id_fkey(post_id: ID!): [Comments]
     @dbquery(
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "created_at", "id", "post_id", "text", "username" FROM "comments" WHERE "post_id" = $1
+      SELECT * FROM "comments" WHERE "post_id" = $1
       """
       configuration: "postgresql_config"
     )
@@ -91,7 +97,10 @@ type Query {
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "post"
+      query: """
+      select * from "post"
+      order by "post"."created_at" desc
+      """
       configuration: "postgresql_config"
     )
   postPaginatedList(first: Int, after: Int): [Post]
@@ -184,15 +193,6 @@ type Query {
       """
       configuration: "postgresql_config"
     )
-  # subredditUsingPost_subreddit_id_fkey(subreddit_id: ID!): Subreddit
-  #   @dbquery(
-  #     type: "postgresql"
-  #     schema: "public"
-  #     query: """
-  #     SELECT "created_at", "id", "topic" FROM "subreddit" WHERE "id" = $1
-  #     """
-  #     configuration: "postgresql_config"
-  #   )
   " Queries for type 'Vote' "
   vote(id: ID!): Vote
     @dbquery(
@@ -217,12 +217,13 @@ type Query {
       """
       configuration: "postgresql_config"
     )
-  voteUsingVote_post_id_fkey(id: ID!): [Vote]
+  voteUsingVote_post_id_fkey(post_id: ID!): [Vote]
     @dbquery(
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "created_at", "id", "post_id", "upvote", "username" FROM "vote" WHERE "post_id" = $1
+      SELECT * FROM "vote" WHERE "post_id" = $1
+      order by "created_at" desc
       """
       configuration: "postgresql_config"
     )
@@ -246,7 +247,6 @@ type Mutation {
     username: String
     post_id: ID
     text: String
-    created_at: DateTime!
   ): Comments
     @dbquery(
       type: "postgresql"
@@ -369,7 +369,6 @@ type Mutation {
   insertVote(
     username: String
     post_id: ID
-    created_at: DateTime!
     upvote: Boolean
   ): Vote
     @dbquery(
