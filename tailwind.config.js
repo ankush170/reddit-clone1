@@ -2,11 +2,11 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -26,19 +26,19 @@ module.exports = {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
-        reddit_orange: '#f54404',
-        reddit_red: '#f54404',
+        reddit_orange: "#f54404",
+        reddit_red: "#f54404",
         reddit_dark: {
-          DEFAULT: '#030303',
-          brighter: '#1a1a1a',
-          brightest: '#272728',
+          DEFAULT: "#030303",
+          brighter: "#1a1a1a",
+          brightest: "#272728",
         },
         reddit_border: {
-          DEFAULT: '#343536',
+          DEFAULT: "#343536",
         },
         reddit_text: {
-          DEFAULT: 'rgb(215, 218, 220)',
-          darker: '#818384',
+          DEFAULT: "rgb(215, 218, 220)",
+          darker: "#818384",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -87,4 +87,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
